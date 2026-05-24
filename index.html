@@ -182,9 +182,9 @@
 <a class="fixed bottom-8 right-8 z-50 bg-[#388E3C] text-white p-4 rounded-full shadow-lg shadow-[#388E3C]/40 hover:scale-110 transition-transform duration-300 group flex items-center gap-2" href="https://wa.me/50766646198" target="_blank"><span class="material-symbols-outlined" style="font-variation-settings:'FILL'1">chat</span><span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 font-bold whitespace-nowrap">WhatsApp</span></a>
 
 <script>
-// ✅ Última URL de Google Apps Script proporcionada por el usuario
+// ✅ NUEVA URL del Google Apps Script actualizada
 const NUMERO_WHATSAPP = "50766646198";
-const URL_APPS_SCRIPT_REGISTRO = "https://script.google.com/macros/s/AKfycbx8_oRWc4qYfJ7k_8pPwelaMFTszQ2NEeENn1cYYiMKLRXGPbLMAqMXrHT79qXXrSFS/exec";
+const URL_APPS_SCRIPT_REGISTRO = "https://script.google.com/macros/s/AKfycby4CwiCz9jSIZH1jVpc5lGCG66k5m4CZAq67YbuD7g6u3J85AaxLAPHSBWnbK2CFCv_/exec";
 
 // Precios para el formulario (base y con cena tanto semanal como mensual)
 const precioMapping = {
@@ -253,7 +253,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const lowPeriod = document.getElementById('periodLowCarb');
         const ketoPeriod = document.getElementById('periodKeto');
         const balancePeriod = document.getElementById('periodBalanced');
-        // Elementos de checkbox y texto extra
         const extraLow = document.getElementById('extraLowCarb');
         const extraKeto = document.getElementById('extraKeto');
         const extraBalanced = document.getElementById('extraBalanced');
@@ -261,45 +260,36 @@ document.addEventListener("DOMContentLoaded", () => {
         if (type === 'weekly') {
             toggleW.classList.add('bg-[#388E3C]', 'text-white'); toggleW.classList.remove('text-on-primary-container');
             toggleM.classList.remove('bg-[#388E3C]', 'text-white'); toggleM.classList.add('text-on-primary-container');
-            // Precios base semanal
             lowPrice.innerText = '$57.50'; ketoPrice.innerText = '$67.50'; balancePrice.innerText = '$47.50';
             lowPeriod.innerText = '/semanal'; ketoPeriod.innerText = '/semanal'; balancePeriod.innerText = '/semanal';
-            // Mostrar los checkboxes con sus textos de precio con cena (visibles siempre)
             extraLow.classList.remove('opacity-0', 'h-0'); extraLow.classList.add('cursor-pointer');
             extraKeto.classList.remove('opacity-0', 'h-0'); extraKeto.classList.add('cursor-pointer');
             extraBalanced.classList.remove('opacity-0', 'h-0'); extraBalanced.classList.add('cursor-pointer');
-            // Asegurar que los textos de los labels sean los correctos para semanal
             const lowLabel = extraLow.querySelector('span');
             const ketoLabel = extraKeto.querySelector('span');
             const balLabel = extraBalanced.querySelector('span');
             if(lowLabel) lowLabel.innerText = '$115 con cenas';
             if(ketoLabel) ketoLabel.innerText = '$135 con cenas';
             if(balLabel) balLabel.innerText = '$95 con cenas';
-            // Resetear checkboxes a unchecked para evitar precios inconsistentes
             const allCenaChecks = document.querySelectorAll('.plan-cena-checkbox');
             allCenaChecks.forEach(ch => { ch.checked = false; });
-            // Restaurar precios base después de resetear
             lowPrice.innerText = '$57.50';
             ketoPrice.innerText = '$67.50';
             balancePrice.innerText = '$47.50';
         } else {
             toggleM.classList.add('bg-[#388E3C]', 'text-white'); toggleM.classList.remove('text-on-primary-container');
             toggleW.classList.remove('bg-[#388E3C]', 'text-white'); toggleW.classList.add('text-on-primary-container');
-            // Precios base mensual
             lowPrice.innerText = '$200'; ketoPrice.innerText = '$250'; balancePrice.innerText = '$175';
             lowPeriod.innerText = '/mensual'; ketoPeriod.innerText = '/mensual'; balancePeriod.innerText = '/mensual';
-            // Aseguramos que los checkboxes se vean (en mensual siempre estaban visibles)
             extraLow.classList.remove('opacity-0', 'h-0'); extraLow.classList.add('cursor-pointer');
             extraKeto.classList.remove('opacity-0', 'h-0'); extraKeto.classList.add('cursor-pointer');
             extraBalanced.classList.remove('opacity-0', 'h-0'); extraBalanced.classList.add('cursor-pointer');
-            // Actualizar textos de los labels a precios mensuales con cena
             const lowLabel = extraLow.querySelector('span');
             const ketoLabel = extraKeto.querySelector('span');
             const balLabel = extraBalanced.querySelector('span');
             if(lowLabel) lowLabel.innerText = '$375 con cenas';
             if(ketoLabel) ketoLabel.innerText = '$450 con cenas';
             if(balLabel) balLabel.innerText = '$350 con cenas';
-            // Resetear checkboxes
             const allCenaChecks = document.querySelectorAll('.plan-cena-checkbox');
             allCenaChecks.forEach(ch => { ch.checked = false; });
             lowPrice.innerText = '$200';
@@ -308,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Envío del formulario a Google Sheets (sin abrir WhatsApp)
+    // Envío del formulario a Google Sheets con CORS y manejo de respuesta
     const regForm = document.getElementById('registro-form');
     if (regForm) {
         const aceptoCheckbox = document.getElementById('acepto-terminos');
@@ -328,23 +318,30 @@ document.addEventListener("DOMContentLoaded", () => {
             const diasChecked = Array.from(regForm.querySelectorAll('input[name="dias"]:checked')).map(cb => cb.value).join(', ');
             const incluyeCena = document.getElementById('incluye-cena')?.checked ? 'SÍ' : 'NO';
 
-            const bodyData = new FormData();
-            bodyData.append('nombre', regForm.nombre.value);
-            bodyData.append('telefono', regForm.telefono.value);
-            bodyData.append('direccion', regForm.direccion.value);
-            bodyData.append('incluye_cena', incluyeCena);
-            bodyData.append('plan', `${regForm.plan.value} (Cena: ${incluyeCena})`);
-            bodyData.append('duracion', regForm.duracion.value);
-            bodyData.append('dias', diasChecked || 'Ninguno');
-            bodyData.append('horario', '12:00 PM - 1:00 PM');
-            bodyData.append('alergias', regForm.alergias.value);
+            const params = new URLSearchParams();
+            params.append('nombre', regForm.nombre.value);
+            params.append('telefono', regForm.telefono.value);
+            params.append('direccion', regForm.direccion.value);
+            params.append('incluye_cena', incluyeCena);
+            params.append('plan', `${regForm.plan.value} (Cena: ${incluyeCena})`);
+            params.append('duracion', regForm.duracion.value);
+            params.append('dias', diasChecked || 'Ninguno');
+            params.append('horario', '12:00 PM - 1:00 PM');
+            params.append('alergias', regForm.alergias.value);
 
-            fetch(URL_APPS_SCRIPT_REGISTRO, { method: 'POST', body: bodyData, mode: 'no-cors' })
-                .then(() => {
+            fetch(URL_APPS_SCRIPT_REGISTRO, {
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: params.toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
                     regForm.reset();
                     btn.innerText = "Enviar Registro y Confirmar Días";
                     btn.disabled = true;
-                    msg.innerText = "¡Inscripción guardada con éxito! Pronto nos pondremos en contacto.";
+                    msg.innerText = data.message;
                     msg.className = "text-center text-sm font-bold mt-2 text-[#388E3C] block";
                     if (aceptoCheckbox) {
                         aceptoCheckbox.checked = false;
@@ -354,14 +351,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     const cenaChk = document.getElementById('incluye-cena');
                     if (cenaChk) cenaChk.checked = false;
                     actualizarSelectPlanFormulario();
-                })
-                .catch(err => {
-                    console.error(err);
-                    btn.innerText = "Reintentar Envío";
-                    btn.disabled = false;
-                    msg.innerText = "Ocurrió un inconveniente al conectar. Intenta nuevamente.";
-                    msg.className = "text-center text-sm font-bold mt-2 text-red-600 block";
-                });
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                btn.innerText = "Reintentar Envío";
+                btn.disabled = false;
+                msg.innerText = "Ocurrió un inconveniente. " + err.message;
+                msg.className = "text-center text-sm font-bold mt-2 text-red-600 block";
+            });
         });
     }
 
@@ -384,7 +384,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const isMonthly = document.getElementById("toggleMonthly")?.classList.contains("bg-[#388E3C]");
             const periodo = isMonthly ? "Mensual" : "Semanal";
             let precioFinal = "";
-            // Obtener el checkbox de cena dentro de la misma tarjeta
             const card = btn.closest('div');
             const cenaCheckboxInCard = card?.querySelector('.plan-cena-checkbox');
             const conCena = cenaCheckboxInCard?.checked || false;
