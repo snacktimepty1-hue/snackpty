@@ -234,7 +234,7 @@
 <div class="mb-8 p-4 bg-[#388E3C]/10 rounded-2xl w-fit"><span class="material-symbols-outlined text-[#388E3C] text-4xl">balance</span></div>
 <h3 class="font-headline-lg text-3xl mb-4 group-hover:text-[#388E3C] transition-colors">Balanceado</h3>
 <ul class="space-y-4 mb-10 text-on-primary-container"><li class="flex items-center gap-3"><span class="material-symbols-outlined text-[#388E3C]">check_circle</span> 500 cal x plato</li><li class="flex items-center gap-3"><span class="material-symbols-outlined text-[#388E3C]">check_circle</span> Carbohidratos Complejos</li><li class="flex items-center gap-3"><span class="material-symbols-outlined text-[#388E3C]">check_circle</span> Nutrición Completa</li><li class="flex items-center gap-3"><span class="material-symbols-outlined text-[#388E3C]">check_circle</span> Menú Variado</li></ul>
-<div class="mb-8 min-h-[4rem]"><span class="text-4xl font-bold transition-all duration-300" id="priceBalanced">$47.50</span><span class="text-outline-variant ml-2" id="periodBalanced">/semanal</span><label class="flex items-center gap-2 mt-2 transition-all duration-300 cursor-pointer" id="extraBalanced"><input type="checkbox" class="w-4 h-4 rounded text-[#388E3C] focus:ring-[#388E3C] border-outline/30 plan-cena-checkbox"><span class="text-inverse-primary text-sm font-bold">$95 con cenas</span></label></div>
+<div class="mb-8 min-h-[4rem]"><span class="text-4xl font-bold transition-all duration-300" id="priceBalanced">$47.50</span><span class="text-outline-variant ml-2" id="periodBalanced">/semanal</span><label class="flex items-center gap-2 mt-2 transition-all duration-300 cursor-pointer" id="extraBalanced"><input type="checkbox" class="w-4 h-4 rounded text-[#388E3C] focus:ring-[#388E3C] border-outline/30 plan-cena-checkbox"><span class="text-inverse-primary text-sm font-bold">$100 con cenas</span></label></div>
 <button class="w-full bg-[#388E3C] text-white py-4 rounded-full font-bold transition-all active:scale-95 orange-glow plan-subscribe" data-plan="Balanceado">Suscribirme al Plan</button>
 </div>
 </div>
@@ -309,10 +309,11 @@ document.getElementById('contactarBtn')?.addEventListener('click', (e) => {
     window.open(whatsappUrl, '_blank');
 });
 
-// Precios
+// Precios actualizados para que coincidan con los de la página
+// Semanal con cena de Balanceado cambió de $95 a $100
 const precioMapping = {
     monthly: { base: { "Keto": "$250/mes", "Low Carb": "$200/mes", "Balanceado": "$175/mes" }, cena: { "Keto": "$450/mes", "Low Carb": "$375/mes", "Balanceado": "$350/mes" } },
-    weekly: { base: { "Keto": "$70/semana", "Low Carb": "$60/semana", "Balanceado": "$55/semana" }, cena: { "Keto": "$135/semana", "Low Carb": "$115/semana", "Balanceado": "$95/semana" } }
+    weekly: { base: { "Keto": "$70/semana", "Low Carb": "$60/semana", "Balanceado": "$55/semana" }, cena: { "Keto": "$135/semana", "Low Carb": "$115/semana", "Balanceado": "$100/semana" } }
 };
 
 function actualizarSelectPlanFormulario() {
@@ -352,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (carousel && prevBtn && nextBtn) {
         const updateDots = () => {
             const scrollPosition = carousel.scrollLeft;
-            const itemWidth = carousel.children[0]?.offsetWidth + 24; // ancho + gap
+            const itemWidth = carousel.children[0]?.offsetWidth + 24;
             const activeIndex = Math.round(scrollPosition / itemWidth);
             dots.forEach((dot, idx) => {
                 if (idx === activeIndex) {
@@ -397,7 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let preciosBase, preciosCena;
             if (isWeekly) {
                 preciosBase = ["$57.50", "$67.50", "$47.50"];
-                preciosCena = ["$115", "$135", "$95"];
+                preciosCena = ["$115", "$135", "$100"];  // Aquí cambié $95 a $100
             } else {
                 preciosBase = ["$200", "$250", "$175"];
                 preciosCena = ["$375", "$450", "$350"];
@@ -438,7 +439,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const balLabel = extraBalanced.querySelector('span');
             if(lowLabel) lowLabel.innerText = '$115 con cenas';
             if(ketoLabel) ketoLabel.innerText = '$135 con cenas';
-            if(balLabel) balLabel.innerText = '$95 con cenas';
+            if(balLabel) balLabel.innerText = '$100 con cenas';  // Aquí cambié $95 a $100
             const allCenaChecks = document.querySelectorAll('.plan-cena-checkbox');
             allCenaChecks.forEach(ch => { ch.checked = false; });
             lowPrice.innerText = '$57.50';
@@ -509,7 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (conCena) {
                     if (planName === "Low Carb") precioFinal = "$115";
                     else if (planName === "Keto Expert") precioFinal = "$135";
-                    else precioFinal = "$95";
+                    else precioFinal = "$100";  // Aquí cambié $95 a $100
                 } else {
                     if (planName === "Low Carb") precioFinal = "$57.50";
                     else if (planName === "Keto Expert") precioFinal = "$67.50";
@@ -742,4 +743,4 @@ window.enviarPedidoConsolidadoMealPrep = function() {
 };
 </script>
 </body>
-</html> 
+</html>
